@@ -30,12 +30,13 @@ app.post('/upload',validate,upload.array('files'),async(req,res)=>{
   let files=[];
   const user_id=req.user_id;
   req.files.map((ele,index)=>{
+    console.log(ele.path);
     files.push({name:ele.originalname,path:ele.path})
     fs.unlink(ele.path,(err)=>{
       if(err){console.log(err);}
     });
   });
-  const data=await formDB.create({name,state,email,geo,country,pincode,address,gender,state,files});
+  const data=await formDB.create({user_id,name,state,email,geo,country,pincode,address,gender,state,files});
   if(data){return res.status(202).json({message:"done"});}
   throw new Error("Not working");
 });
