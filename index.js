@@ -35,10 +35,13 @@ app.post('/upload',validate,upload.array('files'),async(req,res)=>{
   });
   const data=await formDB.create({user_id,name,state,email,geo,country,pincode,address,gender,state,files});
   files.map((ele,index)=>{
-    fs.unlink(ele.path,(err)=>{
-      if(err){console.log("error",err);}
-    }
-  });
+    fs.access(ele.path,fs.constants.F_OK, (err) =>{
+      if(err){console.log(err)}
+      else{
+        fs.unlink(ele.path,(err)=>{console.log(err)})
+      }
+    })
+  })
   if(data){return res.status(202).json({message:"done"});}
   throw new Error("Not working");
 });
