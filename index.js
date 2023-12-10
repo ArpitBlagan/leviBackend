@@ -17,7 +17,7 @@ mongoose.connect(process.env.URL).then(con=>{console.log("connnected")});
 app.use(express.json());
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads')
+      cb(null, './controller')
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -26,17 +26,15 @@ const storage = multer.diskStorage({
   })
 const upload = multer({ storage });
 app.post('/upload',validate,upload.array('files'),async(req,res)=>{
-  const {name,state,geo,country,pincode,address,email,gender,status}=req.body;
+  const {name,state,latitude,longitude,country,pincode,address,email,gender,status}=req.body;
   let files=[];
-  const user_id=req.user_id;
+  const user_id=req.user.id;
   req.files.map((ele,index)=>{
     console.log(ele.path);
     files.push({name:ele.originalname,path:ele.path})
-  });
-  const data=await formDB.create({user_id,name,state,email,geo,country,pincode,address,gender,state,files});
-  req.files.map((ele,index)=>{
     fs.unlink(ele.path,(err)=>{console.log("Error",err);})
   });
+  const data=await formDB.create({user_id,name,state,email,latitude,longitude,country,pincode,address,gender,files});
   if(data){return res.status(202).json({message:"done"});}
   throw new Error("Not working");
 });
