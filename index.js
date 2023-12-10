@@ -9,7 +9,7 @@ const formDB=require('./models/form')
 const app=express();
 app.use(cookieParser());
 app.use(cors({
-  origin:['http://localhost:5173','*'],
+  origin:['http://localhost:5173','*','https://657578a4a8508d7a5eee1a36--dapper-gumdrop-f07661.netlify.app/'],
   credentials:true
 }));const mongoose=require("mongoose");
 const { validate } = require('./middleware/validate');
