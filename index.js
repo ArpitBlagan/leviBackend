@@ -34,14 +34,9 @@ app.post('/upload',validate,upload.array('files'),async(req,res)=>{
     files.push({name:ele.originalname,path:ele.path})
   });
   const data=await formDB.create({user_id,name,state,email,geo,country,pincode,address,gender,state,files});
-  files.map((ele,index)=>{
-    fs.access(ele.path,fs.constants.F_OK, (err) =>{
-      if(err){console.log(err)}
-      else{
-        fs.unlink(ele.path,(err)=>{console.log(err)})
-      }
-    })
-  })
+  req.files.map((ele,index)=>{
+    fs.unlink(ele.path,(err)=>{console.log("Error",err);})
+  });
   if(data){return res.status(202).json({message:"done"});}
   throw new Error("Not working");
 });
