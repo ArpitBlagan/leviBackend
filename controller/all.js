@@ -4,7 +4,7 @@ const formDB=require('../models/form');
 const jwt=require('jsonwebtoken')
 const bcrypt=require('bcryptjs');
 exports.getData=asyncHandler(async(req,res)=>{
-    const user_id=req.user_id;
+    const user_id=req.user.id;
     const data=await formDB.find({user_id});
     if(data){
         console.log("data",data);
